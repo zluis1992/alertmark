@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<p id="demo"></p>
+
+<script>// Get User's Coordinate from their Browser
+window.onload = function() {
+  // HTML5/W3C Geolocation
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(UserLocation);
+  }
+  // Default to Washington, DC
+  //else
+    //NearestCity(38.8951, -77.0367);
+}//
+
+// Callback function for asynchronous call to HTML5 geolocation
+function UserLocation(position) {
+  //NearestCity(position.coords.latitude, position.coords.longitude);
+  NearestCity(10.998804143861799, -74.802779) //<== esta es la ubicacion donde esta la persona, si cambias esto es como si estuviera caminando la persona; 
+}
+
+
+// Convert Degress to Radians
+function Deg2Rad(deg) {
+  return deg * Math.PI / 180;
+}
+
+function PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
+  lat1 = Deg2Rad(lat1);
+  lat2 = Deg2Rad(lat2);
+  lon1 = Deg2Rad(lon1);
+  lon2 = Deg2Rad(lon2);
+  var R = 0.5; // km
+  var x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
+  var y = (lat2 - lat1);
+  var d = Math.sqrt(x * x + y * y) * R;
+  return d;
+}
+
+//var lat = 10.998804143861799; // user's latitude
+//var lon = -74.80277923342624; // user's longitude
+
+var cities = [
+  ["Carulla de la 72",10.998804143861799, -74.80277923342624, "Cra. 53 #72-10", "estas cerca de aca, recuerda comprar leche"], //<== aca irian los mensajes
+  //["Carulla 54", 10.998804143861799, -74.80277923342624, "estas cerca de aca, recuerda comprar leche"],
+  //["Carulla 82", 11.003639498447766, -74.81520758417287, "estas cerca de aca, recuerda comprar huevos"],
+  ["Carulla de la 82", 11.003639498447766, -74.81520758417287,"Calle 82 #50-71", "estas cerca de aca, recuerda comprar huevos"]
+];
+
+//function NearestCity(latitude, longitude) {
+function NearestCity(latitude, longitude) {
+  var mindif = 99;
+  var closest;
+
+  for (index = 0; index < cities.length; ++index) {
+    var dif = PythagorasEquirectangular(latitude, longitude, cities[index][1], cities[index][2]);
+    if (dif < mindif) {
+      closest = index;
+      mindif = dif;
+    }
+  }
+
+  // echo the nearest city
+  alert(cities[closest][0] +", "+ cities[closest][3,4]);
+}
+</script>
+
+</body>
+</html>
