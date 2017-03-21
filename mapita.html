@@ -12,8 +12,18 @@
     <h3>My Google Maps Demo</h3>
     <div id="map"></div>
     <script>
+    window.onload = function() {
+	  // HTML5/W3C Geolocation
+	  if (navigator.geolocation) {
+	    navigator.geolocation.getCurrentPosition(UserLocation);
+	  }
+	  // Default to Washington, DC
+	  //else
+	    //NearestCity(38.8951, -77.0367);
+	}//
     var marker;
       function initMap() {
+        //var uluru = {position.coords.latitude, position.coords.longitude};
         var uluru = {lat: 10.997399, lng: -74.820646};
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 4,
@@ -29,14 +39,17 @@
         });
         //evento que hace brincar el marcardor
         marker.addListener('click', toggleBounce);
-      }
-
       function toggleBounce() {
         if (marker.getAnimation() !== null) {
           marker.setAnimation(null);
         } else {
           marker.setAnimation(google.maps.Animation.BOUNCE);
         }
+      }
+      //Add listener
+		google.maps.event.addListener(marker, "click", function (event) {
+		                    alert(this.position);
+		}); //end addListener
       }
     </script>
     <script async defer
